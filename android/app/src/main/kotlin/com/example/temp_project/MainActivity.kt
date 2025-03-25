@@ -1,4 +1,4 @@
-package com.example.flutter_tech_task
+package com.example.temp_project
 
 import io.flutter.embedding.android.FlutterActivity
 
