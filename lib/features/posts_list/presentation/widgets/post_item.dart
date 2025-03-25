@@ -23,7 +23,10 @@ class PostItem extends StatelessWidget {
           Navigator.pushNamed(
             context, 
             AppRoutes.details, 
-            arguments: {'postId': post.id}
+            arguments: {
+              'post': post,
+              'isSaved': isSaved
+            }
           );
         },
         child: Padding(
