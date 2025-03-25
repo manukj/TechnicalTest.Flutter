@@ -20,7 +20,7 @@ void main() {
   });
 
   const tId = 1;
-  final tPost = Post(
+  const tPost = Post(
     id: tId,
     title: 'Test Post',
     body: 'Test Body',
@@ -29,11 +29,11 @@ void main() {
 
   test('should get post by id from the repository', () async {
     when(mockPostRepository.getPostById(tId))
-        .thenAnswer((_) async => Right(tPost));
+        .thenAnswer((_) async =>const Right(tPost));
 
-    final result = await usecase(PostParams(id: tId));
+    final result = await usecase(const PostParams(id: tId));
 
-    expect(result, Right(tPost));
+    expect(result,const Right(tPost));
     verify(mockPostRepository.getPostById(tId));
     verifyNoMoreInteractions(mockPostRepository);
   });
@@ -43,7 +43,7 @@ void main() {
     when(mockPostRepository.getPostById(tId))
         .thenAnswer((_) async => Left(failure));
 
-    final result = await usecase(PostParams(id: tId));
+    final result = await usecase(const PostParams(id: tId));
 
     expect(result, Left(failure));
     verify(mockPostRepository.getPostById(tId));
@@ -60,7 +60,7 @@ void main() {
               userId: 1,
             )));
 
-    await usecase(PostParams(id: differentId));
+    await usecase(const PostParams(id: differentId));
 
     verify(mockPostRepository.getPostById(differentId));
     verifyNever(mockPostRepository.getPostById(tId));

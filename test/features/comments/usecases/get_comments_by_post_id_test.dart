@@ -20,7 +20,7 @@ void main() {
   });
 
   const tPostId = 1;
-  final tComments = [
+  const tComments = [
     Comment(
       id: 1,
       postId: tPostId,
@@ -39,11 +39,11 @@ void main() {
 
   test('should get comments by post id from the repository', () async {
     when(mockCommentRepository.getCommentsByPostId(tPostId))
-        .thenAnswer((_) async => Right(tComments));
+        .thenAnswer((_) async =>const Right(tComments));
 
-    final result = await usecase(CommentParams(postId: tPostId));
+    final result = await usecase(const CommentParams(postId: tPostId));
 
-    expect(result, Right(tComments));
+    expect(result,const Right(tComments));
     verify(mockCommentRepository.getCommentsByPostId(tPostId));
     verifyNoMoreInteractions(mockCommentRepository);
   });
@@ -53,7 +53,7 @@ void main() {
     when(mockCommentRepository.getCommentsByPostId(tPostId))
         .thenAnswer((_) async => Left(failure));
 
-    final result = await usecase(CommentParams(postId: tPostId));
+    final result = await usecase(const CommentParams(postId: tPostId));
 
     expect(result, Left(failure));
     verify(mockCommentRepository.getCommentsByPostId(tPostId));
@@ -62,7 +62,7 @@ void main() {
 
   test('should handle different post id', () async {
     const differentPostId = 2;
-    final differentComments = [
+    const differentComments = [
       Comment(
         id: 3,
         postId: differentPostId,
@@ -73,9 +73,9 @@ void main() {
     ];
     
     when(mockCommentRepository.getCommentsByPostId(differentPostId))
-        .thenAnswer((_) async => Right(differentComments));
+        .thenAnswer((_) async =>const Right(differentComments));
 
-    await usecase(CommentParams(postId: differentPostId));
+    await usecase(const CommentParams(postId: differentPostId));
 
     verify(mockCommentRepository.getCommentsByPostId(differentPostId));
     verifyNever(mockCommentRepository.getCommentsByPostId(tPostId));
