@@ -26,14 +26,11 @@ void main() {
   test(
     'should get post by id from the repository',
     () async {
-      // arrange
       when(mockPostRepository.getPostById(tId))
           .thenAnswer((_) async => const Right(tPost));
 
-      // act
       final result = await usecase(const Params(id: tId));
 
-      // assert
       expect(result, const Right(tPost));
       verify(mockPostRepository.getPostById(tId));
       verifyNoMoreInteractions(mockPostRepository);
@@ -43,15 +40,12 @@ void main() {
   test(
     'should return server failure when repository returns failure',
     () async {
-      // arrange
       final failure = APIFailure(message: 'API error', statusCode: 500);
       when(mockPostRepository.getPostById(tId))
           .thenAnswer((_) async => Left(failure));
 
-      // act
       final result = await usecase(const Params(id: tId));
 
-      // assert
       expect(result, Left(failure));
       verify(mockPostRepository.getPostById(tId));
       verifyNoMoreInteractions(mockPostRepository);
@@ -61,15 +55,12 @@ void main() {
   test(
     'should pass the Params to the repository correctly',
     () async {
-      // arrange
       const differentId = 42;
       when(mockPostRepository.getPostById(differentId))
           .thenAnswer((_) async => const Right(tPost));
 
-      // act
       await usecase(const Params(id: differentId));
 
-      // assert
       verify(mockPostRepository.getPostById(differentId));
       verifyNever(mockPostRepository
           .getPostById(tId)); // Ensure the original ID was not used

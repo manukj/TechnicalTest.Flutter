@@ -18,7 +18,6 @@ void main() {
 
   group('fromJson', () {
     test('should return a valid model when the JSON is valid', () {
-      // arrange
       final Map<String, dynamic> jsonMap = {
         'id': 1,
         'postId': 1,
@@ -26,9 +25,7 @@ void main() {
         'email': 'test@example.com',
         'body': 'Test body',
       };
-      // act
       final result = CommentModel.fromJson(jsonMap);
-      // assert
       expect(result, tCommentModel);
     });
   });

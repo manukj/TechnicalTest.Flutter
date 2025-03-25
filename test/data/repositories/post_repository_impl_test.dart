@@ -33,14 +33,11 @@ void main() {
     test(
       'should return List<Post> when the remote data source call is successful',
       () async {
-        // arrange
         when(mockRemoteDataSource.getPosts())
-            .thenAnswer((_) async => Right(tPostModels));
+            .thenAnswer((_) async => const Right(tPostModels));
 
-        // act
         final result = await repository.getPosts();
 
-        // assert
         verify(mockRemoteDataSource.getPosts());
         expect(result.isRight(), true);
         result.fold(
@@ -53,15 +50,12 @@ void main() {
     test(
       'should return APIFailure when the remote data source call is unsuccessful',
       () async {
-        // arrange
-        final apiFailure = APIFailure(message: 'Error message', statusCode: 404);
+        final apiFailure =
+            APIFailure(message: 'Error message', statusCode: 404);
         when(mockRemoteDataSource.getPosts())
             .thenAnswer((_) async => Left(apiFailure));
-
-        // act
         final result = await repository.getPosts();
 
-        // assert
         verify(mockRemoteDataSource.getPosts());
         expect(result.isLeft(), true);
         result.fold(
@@ -89,14 +83,11 @@ void main() {
     test(
       'should return Post when the remote data source call is successful',
       () async {
-        // arrange
         when(mockRemoteDataSource.getPostById(tId))
-            .thenAnswer((_) async => Right(tPostModel));
+            .thenAnswer((_) async => const Right(tPostModel));
 
-        // act
         final result = await repository.getPostById(tId);
 
-        // assert
         verify(mockRemoteDataSource.getPostById(tId));
         expect(result.isRight(), true);
         result.fold(
@@ -109,15 +100,13 @@ void main() {
     test(
       'should return APIFailure when the remote data source call is unsuccessful',
       () async {
-        // arrange
-        final apiFailure = APIFailure(message: 'Error message', statusCode: 404);
+        final apiFailure =
+            APIFailure(message: 'Error message', statusCode: 404);
         when(mockRemoteDataSource.getPostById(tId))
             .thenAnswer((_) async => Left(apiFailure));
 
-        // act
         final result = await repository.getPostById(tId);
 
-        // assert
         verify(mockRemoteDataSource.getPostById(tId));
         expect(result.isLeft(), true);
         result.fold(
@@ -155,14 +144,11 @@ void main() {
     test(
       'should return List<Comment> when the remote data source call is successful',
       () async {
-        // arrange
         when(mockRemoteDataSource.getCommentsByPostId(tPostId))
-            .thenAnswer((_) async => Right(tCommentModels));
+            .thenAnswer((_) async => const Right(tCommentModels));
 
-        // act
         final result = await repository.getCommentsByPostId(tPostId);
 
-        // assert
         verify(mockRemoteDataSource.getCommentsByPostId(tPostId));
         expect(result.isRight(), true);
         result.fold(
@@ -175,15 +161,13 @@ void main() {
     test(
       'should return APIFailure when the remote data source call is unsuccessful',
       () async {
-        // arrange
-        final apiFailure = APIFailure(message: 'Error message', statusCode: 404);
+        final apiFailure =
+            APIFailure(message: 'Error message', statusCode: 404);
         when(mockRemoteDataSource.getCommentsByPostId(tPostId))
             .thenAnswer((_) async => Left(apiFailure));
 
-        // act
         final result = await repository.getCommentsByPostId(tPostId);
 
-        // assert
         verify(mockRemoteDataSource.getCommentsByPostId(tPostId));
         expect(result.isLeft(), true);
         result.fold(
@@ -197,4 +181,4 @@ void main() {
       },
     );
   });
-} 
+}

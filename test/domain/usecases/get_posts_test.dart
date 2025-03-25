@@ -28,14 +28,11 @@ void main() {
   test(
     'should get list of posts from the repository',
     () async {
-      // arrange
       when(mockPostRepository.getPosts())
           .thenAnswer((_) async => Right(tPosts));
 
-      // act
       final result = await usecase(NoParams());
 
-      // assert
       expect(result, Right(tPosts));
       verify(mockPostRepository.getPosts());
       verifyNoMoreInteractions(mockPostRepository);
@@ -45,15 +42,12 @@ void main() {
   test(
     'should return server failure when repository returns failure',
     () async {
-      // arrange
       final failure = APIFailure(message: 'API error', statusCode: 500);
       when(mockPostRepository.getPosts())
           .thenAnswer((_) async => Left(failure));
 
-      // act
       final result = await usecase(NoParams());
 
-      // assert
       expect(result, Left(failure));
       verify(mockPostRepository.getPosts());
       verifyNoMoreInteractions(mockPostRepository);

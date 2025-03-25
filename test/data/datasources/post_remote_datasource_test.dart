@@ -24,7 +24,7 @@ void main() {
     dataSource = PostRemoteDataSourceImpl(
       client: mockHttpClient,
       networkInfo: mockNetworkInfo,
-      timeout: const Duration(milliseconds: 100), // Shorter timeout for tests
+      timeout: const Duration(milliseconds: 100), 
     );
   });
 
@@ -52,28 +52,22 @@ void main() {
     ];
 
     test('should perform a GET request on a URL with posts endpoint', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts')))
           .thenAnswer((_) async => http.Response(json.encode(testPostsJson), 200));
 
-      // act
       await dataSource.getPosts();
 
-      // assert
       verify(mockHttpClient.get(Uri.parse('$testUrl/posts')));
     });
 
     test('should return Right with a list of Posts when the response code is 200', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts')))
           .thenAnswer((_) async => http.Response(json.encode(testPostsJson), 200));
 
-      // act
       final result = await dataSource.getPosts();
 
-      // assert
       expect(result.isRight(), true);
       result.fold(
         (failure) => fail('Expected Right but got Left'),
@@ -82,15 +76,12 @@ void main() {
     });
 
     test('should return Left with APIFailure when the response code is not 200', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts')))
           .thenAnswer((_) async => http.Response('Something went wrong', 404));
 
-      // act
       final result = await dataSource.getPosts();
 
-      // assert
       expect(result.isLeft(), true);
       result.fold(
         (failure) {
@@ -103,13 +94,10 @@ void main() {
     });
 
     test('should return Left with NetworkFailure when no internet connection', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
 
-      // act
       final result = await dataSource.getPosts();
 
-      // assert
       expect(result.isLeft(), true);
       result.fold(
         (failure) {
@@ -122,15 +110,12 @@ void main() {
     });
 
     test('should return Left with APIFailure when an exception occurs', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts')))
           .thenThrow(Exception('Test exception'));
 
-      // act
       final result = await dataSource.getPosts();
 
-      // assert
       expect(result.isLeft(), true);
       result.fold(
         (failure) {
@@ -142,7 +127,6 @@ void main() {
     });
 
     test('should return Left with NetworkFailure when timeout occurs', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts')))
           .thenAnswer((_) async {
@@ -150,10 +134,8 @@ void main() {
         return http.Response(json.encode(testPostsJson), 200);
       });
 
-      // act
       final result = await dataSource.getPosts();
 
-      // assert
       expect(result.isLeft(), true);
       result.fold(
         (failure) {
@@ -182,28 +164,22 @@ void main() {
     );
 
     test('should perform a GET request on a URL with post/:id endpoint', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts/$testId')))
           .thenAnswer((_) async => http.Response(json.encode(testPostJson), 200));
 
-      // act
       await dataSource.getPostById(testId);
 
-      // assert
       verify(mockHttpClient.get(Uri.parse('$testUrl/posts/$testId')));
     });
 
     test('should return Right with a Post when the response code is 200', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts/$testId')))
           .thenAnswer((_) async => http.Response(json.encode(testPostJson), 200));
 
-      // act
       final result = await dataSource.getPostById(testId);
 
-      // assert
       expect(result.isRight(), true);
       result.fold(
         (failure) => fail('Expected Right but got Left'),
@@ -212,15 +188,12 @@ void main() {
     });
 
     test('should return Left with APIFailure when the response code is not 200', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts/$testId')))
           .thenAnswer((_) async => http.Response('Something went wrong', 404));
 
-      // act
       final result = await dataSource.getPostById(testId);
 
-      // assert
       expect(result.isLeft(), true);
       result.fold(
         (failure) {
@@ -270,28 +243,22 @@ void main() {
     ];
 
     test('should perform a GET request on a URL with posts/:id/comments endpoint', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts/$testPostId/comments')))
           .thenAnswer((_) async => http.Response(json.encode(testCommentsJson), 200));
 
-      // act
       await dataSource.getCommentsByPostId(testPostId);
 
-      // assert
       verify(mockHttpClient.get(Uri.parse('$testUrl/posts/$testPostId/comments')));
     });
 
     test('should return Right with a list of Comments when the response code is 200', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts/$testPostId/comments')))
           .thenAnswer((_) async => http.Response(json.encode(testCommentsJson), 200));
 
-      // act
       final result = await dataSource.getCommentsByPostId(testPostId);
 
-      // assert
       expect(result.isRight(), true);
       result.fold(
         (failure) => fail('Expected Right but got Left'),
@@ -300,15 +267,12 @@ void main() {
     });
 
     test('should return Left with APIFailure when the response code is not 200', () async {
-      // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(mockHttpClient.get(Uri.parse('$testUrl/posts/$testPostId/comments')))
           .thenAnswer((_) async => http.Response('Something went wrong', 404));
 
-      // act
       final result = await dataSource.getCommentsByPostId(testPostId);
 
-      // assert
       expect(result.isLeft(), true);
       result.fold(
         (failure) {

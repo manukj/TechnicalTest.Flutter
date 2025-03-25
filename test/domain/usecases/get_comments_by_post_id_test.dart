@@ -28,14 +28,11 @@ void main() {
   test(
     'should get comments by post id from the repository',
     () async {
-      // arrange
       when(mockPostRepository.getCommentsByPostId(tPostId))
           .thenAnswer((_) async => Right(tComments));
 
-      // act
       final result = await usecase(const PostIdParam(postId: tPostId));
 
-      // assert
       expect(result, Right(tComments));
       verify(mockPostRepository.getCommentsByPostId(tPostId));
       verifyNoMoreInteractions(mockPostRepository);
@@ -45,15 +42,12 @@ void main() {
   test(
     'should return server failure when repository returns failure',
     () async {
-      // arrange
       final failure = APIFailure(message: 'API error', statusCode: 500);
       when(mockPostRepository.getCommentsByPostId(tPostId))
           .thenAnswer((_) async => Left(failure));
 
-      // act
       final result = await usecase(const PostIdParam(postId: tPostId));
 
-      // assert
       expect(result, Left(failure));
       verify(mockPostRepository.getCommentsByPostId(tPostId));
       verifyNoMoreInteractions(mockPostRepository);
@@ -63,15 +57,12 @@ void main() {
   test(
     'should pass the PostIdParam to the repository correctly',
     () async {
-      // arrange
       const differentPostId = 42;
       when(mockPostRepository.getCommentsByPostId(differentPostId))
           .thenAnswer((_) async => Right(tComments));
 
-      // act
       await usecase(const PostIdParam(postId: differentPostId));
 
-      // assert
       verify(mockPostRepository.getCommentsByPostId(differentPostId));
       verifyNever(mockPostRepository.getCommentsByPostId(tPostId)); // Ensure the original postId was not used
     },

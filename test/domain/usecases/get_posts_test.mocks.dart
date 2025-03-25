@@ -28,8 +28,13 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
-  _FakeEither_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeEither_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [PostRepository].
@@ -43,43 +48,53 @@ class MockPostRepository extends _i1.Mock implements _i3.PostRepository {
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i6.Post>>> getPosts() =>
       (super.noSuchMethod(
-            Invocation.method(#getPosts, []),
-            returnValue:
-                _i4.Future<_i2.Either<_i5.Failure, List<_i6.Post>>>.value(
-                  _FakeEither_0<_i5.Failure, List<_i6.Post>>(
-                    this,
-                    Invocation.method(#getPosts, []),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Post>>>);
+        Invocation.method(
+          #getPosts,
+          [],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, List<_i6.Post>>>.value(
+            _FakeEither_0<_i5.Failure, List<_i6.Post>>(
+          this,
+          Invocation.method(
+            #getPosts,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Post>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.Post>> getPostById(int? id) =>
       (super.noSuchMethod(
-            Invocation.method(#getPostById, [id]),
-            returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.Post>>.value(
-              _FakeEither_0<_i5.Failure, _i6.Post>(
-                this,
-                Invocation.method(#getPostById, [id]),
-              ),
-            ),
-          )
-          as _i4.Future<_i2.Either<_i5.Failure, _i6.Post>>);
+        Invocation.method(
+          #getPostById,
+          [id],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.Post>>.value(
+            _FakeEither_0<_i5.Failure, _i6.Post>(
+          this,
+          Invocation.method(
+            #getPostById,
+            [id],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.Post>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i7.Comment>>> getCommentsByPostId(
-    int? postId,
-  ) =>
+          int? postId) =>
       (super.noSuchMethod(
-            Invocation.method(#getCommentsByPostId, [postId]),
-            returnValue:
-                _i4.Future<_i2.Either<_i5.Failure, List<_i7.Comment>>>.value(
-                  _FakeEither_0<_i5.Failure, List<_i7.Comment>>(
-                    this,
-                    Invocation.method(#getCommentsByPostId, [postId]),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.Either<_i5.Failure, List<_i7.Comment>>>);
+        Invocation.method(
+          #getCommentsByPostId,
+          [postId],
+        ),
+        returnValue:
+            _i4.Future<_i2.Either<_i5.Failure, List<_i7.Comment>>>.value(
+                _FakeEither_0<_i5.Failure, List<_i7.Comment>>(
+          this,
+          Invocation.method(
+            #getCommentsByPostId,
+            [postId],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i7.Comment>>>);
 }
