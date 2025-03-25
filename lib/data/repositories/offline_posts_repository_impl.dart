@@ -13,7 +13,7 @@ class OfflinePostsRepositoryImpl implements OfflinePostsRepository {
 
   @override
   Future<List<Post>> getOfflinePosts() async {
-    return box.values.map((model) => model.toPost()).toList();
+    return Future.value(box.values.map((model) => model.toPost()).toList());
   }
 
   @override
