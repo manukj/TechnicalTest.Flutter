@@ -12,7 +12,7 @@ void main() {
   );
 
   test('should be a subclass of Comment entity', () {
-    // assert
+    
     expect(tCommentModel, isA<Comment>());
   });
 
@@ -32,9 +32,9 @@ void main() {
 
   group('toJson', () {
     test('should return a JSON map containing the proper data', () {
-      // act
+      
       final result = tCommentModel.toJson();
-      // assert
+      
       final expectedMap = {
         'id': 1,
         'postId': 1,

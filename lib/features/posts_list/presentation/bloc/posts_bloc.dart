@@ -1,18 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_tech_task/core/bloc/base_state.dart';
-import 'package:flutter_tech_task/core/usecases/usecase.dart';
 import 'package:flutter_tech_task/domain/entities/post.dart';
-import 'package:flutter_tech_task/features/posts_list/usecases/get_posts.dart';
+import 'package:flutter_tech_task/features/posts_list/usecases/post_list_usecase.dart';
 import 'package:injectable/injectable.dart';
 
 part 'posts_event.dart';
 
 @injectable
 class PostsBloc extends Bloc<PostsEvent, BaseState<List<Post>>> {
-  final GetPosts getPosts;
+  final PostListUseCase postListUseCase;
 
-  PostsBloc({required this.getPosts}) : super(const LoadingState()) {
+  PostsBloc({required this.postListUseCase}) : super(const LoadingState()) {
     on<FetchPostsEvent>(_onFetchPosts);
   }
 
@@ -22,7 +21,7 @@ class PostsBloc extends Bloc<PostsEvent, BaseState<List<Post>>> {
   ) async {
     emit(const LoadingState());
     
-    final result = await getPosts(NoParams());
+    final result = await postListUseCase.getPosts();
     
     result.fold(
       (failure) => emit(ErrorState(failure)),

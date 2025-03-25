@@ -3,21 +3,21 @@ import 'package:flutter_tech_task/core/bloc/base_state.dart';
 import 'package:flutter_tech_task/core/error/failures.dart';
 import 'package:flutter_tech_task/domain/entities/post.dart';
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/posts_bloc.dart';
-import 'package:flutter_tech_task/features/posts_list/usecases/get_posts.dart';
+import 'package:flutter_tech_task/features/posts_list/usecases/post_list_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'posts_bloc_test.mocks.dart';
 
-@GenerateMocks([GetPosts])
+@GenerateMocks([PostListUseCase])
 void main() {
-  late MockGetPosts mockGetPosts;
+  late MockPostListUseCase mockPostListUseCase;
   late PostsBloc bloc;
 
   setUp(() {
-    mockGetPosts = MockGetPosts();
-    bloc = PostsBloc(getPosts: mockGetPosts);
+    mockPostListUseCase = MockPostListUseCase();
+    bloc = PostsBloc(postListUseCase: mockPostListUseCase);
   });
 
   const tPosts = [
@@ -29,7 +29,8 @@ void main() {
     test(
         'should emit [LoadingState, ContentState] when data is fetched successfully',
         () async {
-      when(mockGetPosts(any)).thenAnswer((_) async => const Right(tPosts));
+      when(mockPostListUseCase.getPosts())
+          .thenAnswer((_) async => const Right(tPosts));
 
       final expected = [
         const LoadingState<List<Post>>(),
@@ -43,7 +44,8 @@ void main() {
     test('should emit [LoadingState, ErrorState] when fetching data fails',
         () async {
       final failure = NetworkFailure(message: 'Network error');
-      when(mockGetPosts(any)).thenAnswer((_) async => Left(failure));
+      when(mockPostListUseCase.getPosts())
+          .thenAnswer((_) async => Left(failure));
 
       final expected = [
         const LoadingState<List<Post>>(),

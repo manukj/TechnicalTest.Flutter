@@ -1,21 +1,21 @@
 import 'package:flutter_tech_task/core/bloc/base_state.dart';
 import 'package:flutter_tech_task/domain/entities/post.dart';
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/offline_posts_bloc.dart';
-import 'package:flutter_tech_task/features/posts_list/usecases/get_offline_posts.dart';
+import 'package:flutter_tech_task/features/posts_list/usecases/post_list_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'offline_posts_bloc_test.mocks.dart';
 
-@GenerateMocks([GetOfflinePosts])
+@GenerateMocks([PostListUseCase])
 void main() {
-  late MockGetOfflinePosts mockGetOfflinePosts;
+  late MockPostListUseCase mockPostListUseCase;
   late OfflinePostsBloc bloc;
 
   setUp(() {
-    mockGetOfflinePosts = MockGetOfflinePosts();
-    bloc = OfflinePostsBloc(getOfflinePosts: mockGetOfflinePosts);
+    mockPostListUseCase = MockPostListUseCase();
+    bloc = OfflinePostsBloc(postListUseCase: mockPostListUseCase);
   });
 
   const tPosts = [
@@ -24,31 +24,74 @@ void main() {
   ];
 
   group('FetchOfflinePostsEvent', () {
-    test(
-        'should emit [LoadingState, ContentState] when data is fetched successfully',
+    test('should emit [LoadingState, ContentState] when data is fetched successfully',
         () async {
-      when(mockGetOfflinePosts()).thenAnswer((_) async => tPosts);
+      
+      when(mockPostListUseCase.getOfflinePosts())
+          .thenAnswer((_) async => tPosts);
 
+      
       final expected = [
         const LoadingState<List<Post>>(),
-        const ContentState<List<Post>>(tPosts),
+       const ContentState<List<Post>>(tPosts),
       ];
       expectLater(bloc.stream, emitsInOrder(expected));
 
+      
       bloc.add(const FetchOfflinePostsEvent());
     });
 
     test('should emit [LoadingState, ErrorState] when fetching data fails',
         () async {
-      when(mockGetOfflinePosts()).thenThrow(Exception('Database error'));
+      
+      when(mockPostListUseCase.getOfflinePosts())
+          .thenThrow(Exception('Database error'));
 
+      
       final expected = [
         const LoadingState<List<Post>>(),
         isA<ErrorState<List<Post>>>(),
       ];
       expectLater(bloc.stream, emitsInOrder(expected));
 
+      
       bloc.add(const FetchOfflinePostsEvent());
+    });
+  });
+
+  group('SavePostOfflineEvent', () {
+    test('should call use case to save post and then fetch posts', () async {
+      
+      when(mockPostListUseCase.savePostOffline(any))
+          .thenAnswer((_) async => {});
+      when(mockPostListUseCase.getOfflinePosts())
+          .thenAnswer((_) async => tPosts);
+      
+      
+      bloc.add(SavePostOfflineEvent(tPosts[0]));
+      await untilCalled(mockPostListUseCase.getOfflinePosts());
+      
+      
+      verify(mockPostListUseCase.savePostOffline(tPosts[0]));
+      verify(mockPostListUseCase.getOfflinePosts());
+    });
+  });
+
+  group('RemovePostOfflineEvent', () {
+    test('should call use case to remove post and then fetch posts', () async {
+      
+      when(mockPostListUseCase.removePostOffline(any))
+          .thenAnswer((_) async => {});
+      when(mockPostListUseCase.getOfflinePosts())
+          .thenAnswer((_) async => tPosts);
+      
+      
+      bloc.add(const RemovePostOfflineEvent(1));
+      await untilCalled(mockPostListUseCase.getOfflinePosts());
+      
+      
+      verify(mockPostListUseCase.removePostOffline(1));
+      verify(mockPostListUseCase.getOfflinePosts());
     });
   });
 }
