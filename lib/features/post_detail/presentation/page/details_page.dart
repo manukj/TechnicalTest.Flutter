@@ -85,7 +85,10 @@ class _DetailsPageState extends State<DetailsPage> {
                   Navigator.pushNamed(
                     context, 
                     AppRoutes.comments, 
-                    arguments: {'postId': post.id}
+                    arguments: {
+                      'postId': post.id,
+                      'isSaved': isSaved
+                    }
                   );
                 },
                 icon: const Icon(Icons.comment),

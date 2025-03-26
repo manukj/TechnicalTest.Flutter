@@ -1,19 +1,13 @@
-import '../../domain/entities/comment.dart';
+import 'package:flutter_tech_task/domain/entities/comment.dart';
 
 class CommentModel extends Comment {
   const CommentModel({
-    required int id,
-    required int postId,
-    required String name,
-    required String email,
-    required String body,
-  }) : super(
-          id: id,
-          postId: postId,
-          name: name,
-          email: email,
-          body: body,
-        );
+    required super.id,
+    required super.postId,
+    required super.name,
+    required super.email,
+    required super.body,
+  });
 
   factory CommentModel.fromJson(Map<String, dynamic> json) {
     return CommentModel(

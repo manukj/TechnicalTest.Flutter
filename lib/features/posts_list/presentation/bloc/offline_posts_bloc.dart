@@ -40,7 +40,6 @@ class OfflinePostsBloc extends Bloc<OfflinePostsEvent, BaseState<List<Post>>> {
   ) async {
     try {
       await postListUseCase.savePostOffline(event.post);
-      // Fetch the updated list after saving
       add(const FetchOfflinePostsEvent());
     } catch (e) {
       emit(ErrorState(NetworkFailure(message: e.toString())));
@@ -53,7 +52,6 @@ class OfflinePostsBloc extends Bloc<OfflinePostsEvent, BaseState<List<Post>>> {
   ) async {
     try {
       await postListUseCase.removePostOffline(event.postId);
-      // Fetch the updated list after removing
       add(const FetchOfflinePostsEvent());
     } catch (e) {
       emit(ErrorState(NetworkFailure(message: e.toString())));

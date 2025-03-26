@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tech_task/core/di/injection_container.dart' as di;
 import 'package:flutter_tech_task/core/routes/app_routes.dart';
 import 'package:flutter_tech_task/core/routes/route_generator.dart';
+import 'package:flutter_tech_task/features/comments/presentation/bloc/comments_bloc.dart';
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/offline_posts_bloc.dart';
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/posts_bloc.dart';
 
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<OfflinePostsBloc>(
           create: (_) => di.sl<OfflinePostsBloc>(),
+        ),
+        BlocProvider<CommentsBloc>(
+          create: (_) => di.sl<CommentsBloc>(),
         ),
       ],
       child: MaterialApp(
