@@ -7,6 +7,7 @@ class LceHandler<T> extends StatelessWidget {
   final Widget? loadingWidget;
   final Widget Function(String message)? errorBuilder;
   final Widget Function()? emptyBuilder;
+  final VoidCallback? onRetry;
 
   const LceHandler({
     Key? key,
@@ -15,6 +16,7 @@ class LceHandler<T> extends StatelessWidget {
     this.loadingWidget,
     this.errorBuilder,
     this.emptyBuilder,
+    this.onRetry,
   }) : super(key: key);
 
   @override
@@ -27,21 +29,58 @@ class LceHandler<T> extends StatelessWidget {
       ErrorState<T>(failure: final failure) => errorBuilder != null
           ? errorBuilder!(failure.message)
           : Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.error_outline,
-                      color: Colors.red,
-                      size: 48,
+                      size: 64,
+                      color: Theme.of(context).colorScheme.error,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     Text(
-                      'Error: ${failure.message}',
-                      textAlign: TextAlign.center,
+                      'Error',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
                     ),
+                    const SizedBox(height: 12),
+                    Text(
+                      failure.message,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
+                      ),
+                    ),
+                    if (onRetry != null) ...[
+                      const SizedBox(height: 32),
+                      Container(
+                        width: double.infinity,
+                        constraints: const BoxConstraints(maxWidth: 250),
+                        child: FilledButton(
+                          onPressed: onRetry,
+                          style: FilledButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                          ),
+                          child: const Text(
+                            'RETRY',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

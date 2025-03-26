@@ -19,6 +19,9 @@ class PostsTab extends StatelessWidget {
       child: BlocBuilder<PostsBloc, BaseState<List<Post>>>(
         builder: (context, state) {
           return LceHandler<List<Post>>(
+            onRetry: () {
+              context.read<PostsBloc>().add(const FetchPostsEvent());
+            },
             state: state,
             contentBuilder: (posts) => _buildPostsList(context, posts),
             emptyBuilder: () => const Center(

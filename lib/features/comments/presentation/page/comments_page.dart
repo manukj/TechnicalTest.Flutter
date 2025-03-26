@@ -55,6 +55,11 @@ class _CommentsPageState extends State<CommentsPage> {
                   .add(FetchCommentsByPostIdEvent(postId: postId));
             },
             child: LceHandler<List<Comment>>(
+              onRetry: () {
+                context
+                    .read<CommentsBloc>()
+                    .add(FetchCommentsByPostIdEvent(postId: postId));
+              },
               state: state,
               contentBuilder: (comments) => _buildCommentsList(comments),
               emptyBuilder: () => Center(
