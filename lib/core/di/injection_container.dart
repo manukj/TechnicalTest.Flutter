@@ -1,8 +1,10 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_tech_task/core/network/network_info.dart';
 import 'package:flutter_tech_task/core/services/hive_service.dart';
+import 'package:flutter_tech_task/data/datasources/comment_local_datasource.dart';
 import 'package:flutter_tech_task/data/datasources/post_local_datasource.dart';
 import 'package:flutter_tech_task/data/datasources/post_remote_datasource.dart';
+import 'package:flutter_tech_task/data/models/comment_model.dart';
 import 'package:flutter_tech_task/data/models/offline_post_model.dart';
 import 'package:flutter_tech_task/data/repositories/comment_repository_impl.dart';
 import 'package:flutter_tech_task/data/repositories/offline_posts_repository_impl.dart';
@@ -44,6 +46,12 @@ Future<void> _registerCoreServices() async {
     offlinePostsBox,
     instanceName: 'offline_posts'
   );
+  
+  var offlineCommentsBox = await sl<HiveService>().openOfflineCommentsBox();
+  sl.registerSingleton<Box<CommentModel>>(
+    offlineCommentsBox,
+    instanceName: 'offline_comments'
+  );
 }
 
 Future<void> _registerPostsFeature() async {
@@ -75,8 +83,17 @@ Future<void> _registerPostsFeature() async {
 }
 
 void _registerCommentsFeature() {
+  sl.registerLazySingleton<CommentLocalDataSource>(
+    () => CommentLocalDataSourceImpl(
+      sl.get<Box<CommentModel>>(instanceName: 'offline_comments'),
+    ),
+  );
+
   sl.registerLazySingleton<CommentRepository>(
-    () => CommentRepositoryImpl(remoteDataSource: sl()),
+    () => CommentRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+    ),
   );
   
   sl.registerLazySingleton(() => GetCommentsByPostId(sl()));

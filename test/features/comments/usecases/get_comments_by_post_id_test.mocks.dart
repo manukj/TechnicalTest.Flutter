@@ -62,4 +62,47 @@ class MockCommentRepository extends _i1.Mock implements _i3.CommentRepository {
           ),
         )),
       ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Comment>>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, void>> saveComments(
+    int? postId,
+    List<_i6.Comment>? comments,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveComments,
+          [
+            postId,
+            comments,
+          ],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
+            _FakeEither_0<_i5.Failure, void>(
+          this,
+          Invocation.method(
+            #saveComments,
+            [
+              postId,
+              comments,
+            ],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, void>> removeComments(int? postId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #removeComments,
+          [postId],
+        ),
+        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
+            _FakeEither_0<_i5.Failure, void>(
+          this,
+          Invocation.method(
+            #removeComments,
+            [postId],
+          ),
+        )),
+      ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
 }

@@ -9,10 +9,13 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:flutter_tech_task/core/services/hive_service.dart' as _i421;
+import 'package:flutter_tech_task/data/datasources/comment_local_datasource.dart'
+    as _i970;
 import 'package:flutter_tech_task/data/datasources/post_local_datasource.dart'
     as _i811;
 import 'package:flutter_tech_task/data/datasources/post_remote_datasource.dart'
     as _i22;
+import 'package:flutter_tech_task/data/models/comment_model.dart' as _i105;
 import 'package:flutter_tech_task/data/models/offline_post_model.dart' as _i516;
 import 'package:flutter_tech_task/data/repositories/comment_repository_impl.dart'
     as _i699;
@@ -50,26 +53,31 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     gh.singleton<_i421.HiveService>(() => _i421.HiveService());
+    gh.factory<_i970.CommentLocalDataSourceImpl>(() =>
+        _i970.CommentLocalDataSourceImpl(gh<_i979.Box<_i105.CommentModel>>(
+            instanceName: 'offline_comments')));
     gh.factory<_i524.PostListUseCase>(() => _i524.PostListUseCase(
           gh<_i488.PostRepository>(),
           gh<_i670.OfflinePostsRepository>(),
         ));
     gh.factory<_i624.OfflinePostsRepositoryImpl>(() =>
         _i624.OfflinePostsRepositoryImpl(gh<_i811.PostLocalDataSource>()));
-    gh.lazySingleton<_i1054.CommentRepository>(() =>
-        _i699.CommentRepositoryImpl(
-            remoteDataSource: gh<_i22.PostRemoteDataSource>()));
     gh.factory<_i811.PostLocalDataSourceImpl>(() =>
         _i811.PostLocalDataSourceImpl(gh<_i979.Box<_i516.OfflinePostModel>>(
             instanceName: 'offline_posts')));
-    gh.factory<_i310.GetCommentsByPostId>(
-        () => _i310.GetCommentsByPostId(gh<_i1054.CommentRepository>()));
-    gh.factory<_i323.CommentsBloc>(() => _i323.CommentsBloc(
-        getCommentsByPostId: gh<_i310.GetCommentsByPostId>()));
+    gh.lazySingleton<_i1054.CommentRepository>(
+        () => _i699.CommentRepositoryImpl(
+              remoteDataSource: gh<_i22.PostRemoteDataSource>(),
+              localDataSource: gh<_i970.CommentLocalDataSource>(),
+            ));
     gh.factory<_i995.OfflinePostsBloc>(() =>
         _i995.OfflinePostsBloc(postListUseCase: gh<_i524.PostListUseCase>()));
     gh.factory<_i582.PostsBloc>(
         () => _i582.PostsBloc(postListUseCase: gh<_i524.PostListUseCase>()));
+    gh.factory<_i310.GetCommentsByPostId>(
+        () => _i310.GetCommentsByPostId(gh<_i1054.CommentRepository>()));
+    gh.factory<_i323.CommentsBloc>(() => _i323.CommentsBloc(
+        getCommentsByPostId: gh<_i310.GetCommentsByPostId>()));
     return this;
   }
 }
