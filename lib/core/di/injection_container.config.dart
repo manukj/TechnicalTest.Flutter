@@ -9,6 +9,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:flutter_tech_task/core/services/hive_service.dart' as _i421;
+import 'package:flutter_tech_task/data/datasources/post_local_datasource.dart'
+    as _i811;
 import 'package:flutter_tech_task/data/datasources/post_remote_datasource.dart'
     as _i22;
 import 'package:flutter_tech_task/data/models/offline_post_model.dart' as _i516;
@@ -52,11 +54,13 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i488.PostRepository>(),
           gh<_i670.OfflinePostsRepository>(),
         ));
+    gh.factory<_i624.OfflinePostsRepositoryImpl>(() =>
+        _i624.OfflinePostsRepositoryImpl(gh<_i811.PostLocalDataSource>()));
     gh.lazySingleton<_i1054.CommentRepository>(() =>
         _i699.CommentRepositoryImpl(
             remoteDataSource: gh<_i22.PostRemoteDataSource>()));
-    gh.factory<_i624.OfflinePostsRepositoryImpl>(() =>
-        _i624.OfflinePostsRepositoryImpl(gh<_i979.Box<_i516.OfflinePostModel>>(
+    gh.factory<_i811.PostLocalDataSourceImpl>(() =>
+        _i811.PostLocalDataSourceImpl(gh<_i979.Box<_i516.OfflinePostModel>>(
             instanceName: 'offline_posts')));
     gh.factory<_i310.GetCommentsByPostId>(
         () => _i310.GetCommentsByPostId(gh<_i1054.CommentRepository>()));

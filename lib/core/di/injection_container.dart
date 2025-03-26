@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_tech_task/core/network/network_info.dart';
 import 'package:flutter_tech_task/core/services/hive_service.dart';
+import 'package:flutter_tech_task/data/datasources/post_local_datasource.dart';
 import 'package:flutter_tech_task/data/datasources/post_remote_datasource.dart';
 import 'package:flutter_tech_task/data/models/offline_post_model.dart';
 import 'package:flutter_tech_task/data/repositories/comment_repository_impl.dart';
@@ -53,14 +54,18 @@ Future<void> _registerPostsFeature() async {
     ),
   );
   
+  sl.registerLazySingleton<PostLocalDataSource>(
+    () => PostLocalDataSourceImpl(
+      sl.get<Box<OfflinePostModel>>(instanceName: 'offline_posts'),
+    ),
+  );
+  
   sl.registerLazySingleton<PostRepository>(
     () => PostRepositoryImpl(remoteDataSource: sl()),
   );
   
   sl.registerLazySingleton<OfflinePostsRepository>(
-    () => OfflinePostsRepositoryImpl(
-      sl.get<Box<OfflinePostModel>>(instanceName: 'offline_posts'),
-    ),
+    () => OfflinePostsRepositoryImpl(sl()),
   );
   
   sl.registerLazySingleton(() => PostListUseCase(sl(), sl()));

@@ -1,21 +1,22 @@
+import 'package:flutter_tech_task/data/datasources/post_local_datasource.dart';
 import 'package:flutter_tech_task/data/models/offline_post_model.dart';
 import 'package:flutter_tech_task/data/repositories/offline_posts_repository_impl.dart';
 import 'package:flutter_tech_task/domain/entities/post.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-@GenerateMocks([Box])
+// Generate mocks for PostLocalDataSource
+@GenerateMocks([PostLocalDataSource])
 import 'offline_posts_repository_impl_test.mocks.dart';
 
 void main() {
   late OfflinePostsRepositoryImpl repository;
-  late MockBox<OfflinePostModel> mockBox;
+  late MockPostLocalDataSource mockDataSource;
 
   setUp(() {
-    mockBox = MockBox<OfflinePostModel>();
-    repository = OfflinePostsRepositoryImpl(mockBox);
+    mockDataSource = MockPostLocalDataSource();
+    repository = OfflinePostsRepositoryImpl(mockDataSource);
   });
 
   const tPost = Post(
@@ -26,22 +27,22 @@ void main() {
   );
 
   group('OfflinePostsRepositoryImpl', () {
-    test('should save post to Hive box', () async {
+    test('should save post to local storage', () async {
       await repository.savePostOffline(tPost);
 
-      verify(mockBox.put(tPost.id, any)).called(1);
-      verifyNoMoreInteractions(mockBox);
+      verify(mockDataSource.savePostOffline(any)).called(1);
+      verifyNoMoreInteractions(mockDataSource);
     });
 
-    test('should remove post from Hive box', () async {
+    test('should remove post from local storage', () async {
       await repository.removePostOffline(tPost.id);
 
-      verify(mockBox.delete(tPost.id)).called(1);
-      verifyNoMoreInteractions(mockBox);
+      verify(mockDataSource.removePostOffline(tPost.id)).called(1);
+      verifyNoMoreInteractions(mockDataSource);
     });
 
-    test('should get all posts from Hive box', () async {
-      final tOfflinePosts = [
+    test('should get all posts from local storage', () async {
+      final tOfflinePostModels = [
         OfflinePostModel.fromPost(tPost),
         OfflinePostModel.fromPost(
           const Post(
@@ -52,23 +53,25 @@ void main() {
           ),
         ),
       ];
-      when(mockBox.values).thenReturn(tOfflinePosts);
+      when(mockDataSource.getOfflinePosts())
+          .thenAnswer((_) async => tOfflinePostModels);
 
       final result = await repository.getOfflinePosts();
 
-      expect(result, tOfflinePosts.map((model) => model.toPost()).toList());
-      verify(mockBox.values).called(1);
-      verifyNoMoreInteractions(mockBox);
+      expect(result, tOfflinePostModels.map((model) => model.toPost()).toList());
+      verify(mockDataSource.getOfflinePosts()).called(1);
+      verifyNoMoreInteractions(mockDataSource);
     });
 
-    test('should return empty list when no posts in Hive box', () async {
-      when(mockBox.values).thenReturn([]);
+    test('should return empty list when no posts in local storage', () async {
+      when(mockDataSource.getOfflinePosts())
+          .thenAnswer((_) async => []);
 
       final result = await repository.getOfflinePosts();
 
       expect(result, isEmpty);
-      verify(mockBox.values).called(1);
-      verifyNoMoreInteractions(mockBox);
+      verify(mockDataSource.getOfflinePosts()).called(1);
+      verifyNoMoreInteractions(mockDataSource);
     });
   });
 }
