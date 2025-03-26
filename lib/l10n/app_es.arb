@@ -1,0 +1,19 @@
+{
+    "appTitle": "Prueba Técnica",
+    "posts": "Publicaciones",
+    "comments": "Comentarios",
+    "noComments": "No se encontraron comentarios",
+    "retry": "Reintentar",
+    "saveForOffline": "Guardar para uso sin conexión",
+    "removeFromSaved": "Eliminar de guardados",
+    "commentsSaved": "Comentarios guardados para acceso sin conexión",
+    "commentsRemoved": "Comentarios eliminados de elementos guardados",
+    "error": "Error",
+    "noInternet": "Sin conexión a internet",
+    "tryAgain": "Intentar de nuevo",
+    "savedPosts": "Publicaciones Guardadas",
+    "noPosts": "No hay publicaciones disponibles",
+    "bookmarkToSee": "Guarda publicaciones para verlas aquí",
+    "english": "Inglés",
+    "spanish": "Español"
+} 

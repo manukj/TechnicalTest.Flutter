@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tech_task/core/bloc/base_state.dart';
+import 'package:flutter_tech_task/core/extensions/context_extensions.dart';
 import 'package:flutter_tech_task/core/widgets/lce_handler.dart';
 import 'package:flutter_tech_task/domain/entities/post.dart';
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/offline_posts_bloc.dart';
@@ -24,17 +25,17 @@ class PostsTab extends StatelessWidget {
             },
             state: state,
             contentBuilder: (posts) => _buildPostsList(context, posts),
-            emptyBuilder: () => const Center(
+            emptyBuilder: () => Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.article_outlined,
                     size: 64,
                     color: Colors.grey,
                   ),
-                  SizedBox(height: 16),
-                  Text('No posts available'),
+                  const SizedBox(height: 16),
+                  Text(context.tr.noPosts),
                 ],
               ),
             ),

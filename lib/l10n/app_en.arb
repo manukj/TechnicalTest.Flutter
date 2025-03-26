@@ -1,0 +1,19 @@
+{
+    "appTitle": "Technical Test",
+    "posts": "Posts",
+    "comments": "Comments",
+    "noComments": "No comments found",
+    "retry": "Retry",
+    "saveForOffline": "Save for Offline",
+    "removeFromSaved": "Remove from Saved",
+    "commentsSaved": "Comments saved for offline access",
+    "commentsRemoved": "Comments removed from saved items",
+    "error": "Error",
+    "noInternet": "No internet connection",
+    "tryAgain": "Try Again",
+    "savedPosts": "Saved Posts",
+    "noPosts": "No posts available",
+    "bookmarkToSee": "Bookmark posts to see them here",
+    "english": "English",
+    "spanish": "Spanish"
+} 

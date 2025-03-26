@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tech_task/core/bloc/base_state.dart';
+import 'package:flutter_tech_task/core/extensions/context_extensions.dart';
+import 'package:flutter_tech_task/core/widgets/lce_handler.dart';
 import 'package:flutter_tech_task/domain/entities/comment.dart';
 import 'package:flutter_tech_task/features/comments/presentation/bloc/comments_bloc.dart';
 import 'package:flutter_tech_task/features/comments/presentation/widgets/comment_item.dart';
@@ -26,16 +28,17 @@ class _CommentsPageState extends State<CommentsPage> {
 
   void _toggleSaveAllComments(List<Comment> comments) {
     final state = context.read<CommentsBloc>().state;
+
     if (state is ContentState<List<Comment>>) {
       if (state.isFromCache) {
         context.read<CommentsBloc>().add(RemoveCommentsEvent(postId));
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Comments removed from saved items')),
+          SnackBar(content: Text(context.tr.commentsRemoved)),
         );
       } else {
         context.read<CommentsBloc>().add(SaveCommentsEvent(postId, comments));
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Comments saved for offline access')),
+          SnackBar(content: Text(context.tr.commentsSaved)),
         );
       }
     }
@@ -45,55 +48,7 @@ class _CommentsPageState extends State<CommentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Comments'),
-      ),
-      body: BlocBuilder<CommentsBloc, BaseState<List<Comment>>>(
-        builder: (context, state) {
-          if (state is LoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state is ErrorState<List<Comment>>) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(state.failure.message),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      context
-                          .read<CommentsBloc>()
-                          .add(FetchCommentsByPostId(postId));
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          if (state is ContentState<List<Comment>>) {
-            final comments = state.data;
-            if (comments.isEmpty) {
-              return const Center(child: Text('No comments found'));
-            }
-
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<CommentsBloc>().add(FetchCommentsByPostId(postId));
-              },
-              child: ListView.builder(
-                itemCount: comments.length,
-                itemBuilder: (context, index) {
-                  return CommentItem(comment: comments[index]);
-                },
-              ),
-            );
-          }
-
-          return const SizedBox.shrink();
-        },
+        title: Text(context.tr.comments),
       ),
       floatingActionButton: BlocBuilder<CommentsBloc, BaseState<List<Comment>>>(
         builder: (context, state) {
@@ -110,7 +65,9 @@ class _CommentsPageState extends State<CommentsPage> {
                     : Theme.of(context).colorScheme.primary,
               ),
               label: Text(
-                state.isFromCache ? 'Remove from Saved' : 'Save for Offline',
+                state.isFromCache
+                    ? context.tr.removeFromSaved
+                    : context.tr.saveForOffline,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -132,6 +89,25 @@ class _CommentsPageState extends State<CommentsPage> {
           return const SizedBox.shrink();
         },
       ),
+      body: BlocBuilder<CommentsBloc, BaseState<List<Comment>>>(
+          builder: (context, state) {
+        return LceHandler<List<Comment>>(
+          state: state,
+          onRetry: () =>
+              context.read<CommentsBloc>().add(FetchCommentsByPostId(postId)),
+          contentBuilder: (comments) => RefreshIndicator(
+            onRefresh: () async {
+              context.read<CommentsBloc>().add(FetchCommentsByPostId(postId));
+            },
+            child: ListView.builder(
+              itemCount: comments.length,
+              itemBuilder: (context, index) {
+                return CommentItem(comment: comments[index]);
+              },
+            ),
+          ),
+        );
+      }),
     );
   }
 }

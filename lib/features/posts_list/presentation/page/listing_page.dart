@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tech_task/core/bloc/base_state.dart';
+import 'package:flutter_tech_task/core/extensions/context_extensions.dart';
+import 'package:flutter_tech_task/core/providers/locale_provider.dart';
 import 'package:flutter_tech_task/domain/entities/post.dart';
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/offline_posts_bloc.dart';
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/posts_bloc.dart';
@@ -38,11 +40,41 @@ class _ListingPageState extends State<ListingPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Posts'),
+        title: Text(context.tr.posts),
+        actions: [
+          PopupMenuButton<Locale>(
+            icon: const Icon(Icons.language),
+            onSelected: (Locale locale) {
+              context.read<LocaleProvider>().setLocale(locale);
+            },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<Locale>(
+                value: const Locale('en'),
+                child: Row(
+                  children: [
+                    const Text('🇬🇧 '),
+                    const SizedBox(width: 8),
+                    Text(context.tr.english),
+                  ],
+                ),
+              ),
+              PopupMenuItem<Locale>(
+                value: const Locale('es'),
+                child: Row(
+                  children: [
+                    const Text('🇪🇸 '),
+                    const SizedBox(width: 8),
+                    Text(context.tr.spanish),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           tabs: [
-            const Tab(text: 'Posts'),
+            Tab(text: context.tr.posts),
             BlocBuilder<OfflinePostsBloc, BaseState<List<Post>>>(
               builder: (context, state) {
                 int count = 0;
@@ -53,7 +85,7 @@ class _ListingPageState extends State<ListingPage>
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('Saved Posts'),
+                      Flexible(child: Text(context.tr.savedPosts)),
                       if (count > 0) ...[
                         const SizedBox(width: 4),
                         Badge(
