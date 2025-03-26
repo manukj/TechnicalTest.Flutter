@@ -18,12 +18,12 @@ class CommentRepositoryImpl implements CommentRepository {
   });
 
   @override
-  Future<Either<Failure, List<Comment>>> getCommentsByPostId(int postId) async {
+  Future<Either<Failure, (List<Comment>, bool)>> getCommentsByPostId(int postId) async {
     try {
       final localComments = await localDataSource.getComments(postId);
       
       if (localComments.isNotEmpty) {
-        return Right(localComments);
+        return Right((localComments, true));
       }
       
       final remoteResult = await remoteDataSource.getCommentsByPostId(postId);
@@ -32,7 +32,7 @@ class CommentRepositoryImpl implements CommentRepository {
         (failure) => Left(failure),
         (comments) async {
           await localDataSource.saveComments(postId, comments);
-          return Right(comments);
+          return Right((comments, false));
         },
       );
     } catch (e) {

@@ -39,11 +39,11 @@ void main() {
 
   test('should get comments by post id from the repository', () async {
     when(mockCommentRepository.getCommentsByPostId(tPostId))
-        .thenAnswer((_) async =>const Right(tComments));
+        .thenAnswer((_) async => Right((tComments, true)));
 
     final result = await usecase(const CommentParams(postId: tPostId));
 
-    expect(result,const Right(tComments));
+    expect(result, Right((tComments, true)));
     verify(mockCommentRepository.getCommentsByPostId(tPostId));
     verifyNoMoreInteractions(mockCommentRepository);
   });
@@ -73,7 +73,7 @@ void main() {
     ];
     
     when(mockCommentRepository.getCommentsByPostId(differentPostId))
-        .thenAnswer((_) async =>const Right(differentComments));
+        .thenAnswer((_) async => Right((differentComments, false)));
 
     await usecase(const CommentParams(postId: differentPostId));
 

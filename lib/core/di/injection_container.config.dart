@@ -31,6 +31,10 @@ import 'package:flutter_tech_task/features/comments/presentation/bloc/comments_b
     as _i323;
 import 'package:flutter_tech_task/features/comments/usecases/get_comments_by_post_id.dart'
     as _i310;
+import 'package:flutter_tech_task/features/comments/usecases/remove_comments.dart'
+    as _i19;
+import 'package:flutter_tech_task/features/comments/usecases/save_comments.dart'
+    as _i18;
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/offline_posts_bloc.dart'
     as _i995;
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/posts_bloc.dart'
@@ -76,8 +80,15 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i582.PostsBloc(postListUseCase: gh<_i524.PostListUseCase>()));
     gh.factory<_i310.GetCommentsByPostId>(
         () => _i310.GetCommentsByPostId(gh<_i1054.CommentRepository>()));
+    gh.factory<_i19.RemoveComments>(
+        () => _i19.RemoveComments(gh<_i1054.CommentRepository>()));
+    gh.factory<_i18.SaveComments>(
+        () => _i18.SaveComments(gh<_i1054.CommentRepository>()));
     gh.factory<_i323.CommentsBloc>(() => _i323.CommentsBloc(
-        getCommentsByPostId: gh<_i310.GetCommentsByPostId>()));
+          getCommentsByPostId: gh<_i310.GetCommentsByPostId>(),
+          saveComments: gh<_i18.SaveComments>(),
+          removeComments: gh<_i19.RemoveComments>(),
+        ));
     return this;
   }
 }

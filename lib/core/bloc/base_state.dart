@@ -14,11 +14,12 @@ class LoadingState<T> extends BaseState<T> {
 
 class ContentState<T> extends BaseState<T> {
   final T data;
+  final bool isFromCache;
   
-  const ContentState(this.data);
+  const ContentState(this.data, {this.isFromCache = false});
   
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [data, isFromCache];
 }
 
 class ErrorState<T> extends BaseState<T> {

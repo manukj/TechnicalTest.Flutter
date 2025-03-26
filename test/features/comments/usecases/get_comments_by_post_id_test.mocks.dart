@@ -45,23 +45,22 @@ class MockCommentRepository extends _i1.Mock implements _i3.CommentRepository {
   }
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, List<_i6.Comment>>> getCommentsByPostId(
-          int? postId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #getCommentsByPostId,
-          [postId],
-        ),
-        returnValue:
-            _i4.Future<_i2.Either<_i5.Failure, List<_i6.Comment>>>.value(
-                _FakeEither_0<_i5.Failure, List<_i6.Comment>>(
-          this,
-          Invocation.method(
-            #getCommentsByPostId,
-            [postId],
-          ),
-        )),
-      ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.Comment>>>);
+  _i4.Future<_i2.Either<_i5.Failure, (List<_i6.Comment>, bool)>>
+      getCommentsByPostId(int? postId) => (super.noSuchMethod(
+            Invocation.method(
+              #getCommentsByPostId,
+              [postId],
+            ),
+            returnValue: _i4.Future<
+                    _i2.Either<_i5.Failure, (List<_i6.Comment>, bool)>>.value(
+                _FakeEither_0<_i5.Failure, (List<_i6.Comment>, bool)>(
+              this,
+              Invocation.method(
+                #getCommentsByPostId,
+                [postId],
+              ),
+            )),
+          ) as _i4.Future<_i2.Either<_i5.Failure, (List<_i6.Comment>, bool)>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, void>> saveComments(

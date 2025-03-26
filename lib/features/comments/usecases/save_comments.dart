@@ -6,23 +6,27 @@ import 'package:flutter_tech_task/domain/entities/comment.dart';
 import 'package:flutter_tech_task/domain/repositories/comment_repository.dart';
 import 'package:injectable/injectable.dart';
 
-class CommentParams extends Equatable {
+class SaveCommentsParams extends Equatable {
   final int postId;
+  final List<Comment> comments;
 
-  const CommentParams({required this.postId});
+  const SaveCommentsParams({
+    required this.postId,
+    required this.comments,
+  });
 
   @override
-  List<Object?> get props => [postId];
+  List<Object?> get props => [postId, comments];
 }
 
 @injectable
-class GetCommentsByPostId implements UseCase<(List<Comment>, bool), CommentParams> {
+class SaveComments implements UseCase<void, SaveCommentsParams> {
   final CommentRepository repository;
 
-  GetCommentsByPostId(this.repository);
+  SaveComments(this.repository);
 
   @override
-  Future<Either<Failure, (List<Comment>, bool)>> call(CommentParams params) async {
-    return await repository.getCommentsByPostId(params.postId);
+  Future<Either<Failure, void>> call(SaveCommentsParams params) async {
+    return await repository.saveComments(params.postId, params.comments);
   }
 } 

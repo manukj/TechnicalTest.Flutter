@@ -14,6 +14,8 @@ import 'package:flutter_tech_task/domain/repositories/offline_posts_repository.d
 import 'package:flutter_tech_task/domain/repositories/post_repository.dart';
 import 'package:flutter_tech_task/features/comments/presentation/bloc/comments_bloc.dart';
 import 'package:flutter_tech_task/features/comments/usecases/get_comments_by_post_id.dart';
+import 'package:flutter_tech_task/features/comments/usecases/remove_comments.dart';
+import 'package:flutter_tech_task/features/comments/usecases/save_comments.dart';
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/offline_posts_bloc.dart';
 import 'package:flutter_tech_task/features/posts_list/presentation/bloc/posts_bloc.dart';
 import 'package:flutter_tech_task/features/posts_list/usecases/post_list_usecase.dart';
@@ -97,6 +99,12 @@ void _registerCommentsFeature() {
   );
   
   sl.registerLazySingleton(() => GetCommentsByPostId(sl()));
+  sl.registerLazySingleton(() => SaveComments(sl()));
+  sl.registerLazySingleton(() => RemoveComments(sl()));
   
-  sl.registerFactory(() => CommentsBloc(getCommentsByPostId: sl()));
+  sl.registerFactory(() => CommentsBloc(
+    getCommentsByPostId: sl(),
+    saveComments: sl(),
+    removeComments: sl(),
+  ));
 }

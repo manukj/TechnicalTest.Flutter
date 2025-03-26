@@ -1,17 +1,22 @@
 part of 'comments_bloc.dart';
 
-sealed class CommentsEvent extends Equatable {
-  const CommentsEvent();
+abstract class CommentsEvent {}
 
-  @override
-  List<Object> get props => [];
-}
-
-class FetchCommentsByPostIdEvent extends CommentsEvent {
+class FetchCommentsByPostId extends CommentsEvent {
   final int postId;
 
-  const FetchCommentsByPostIdEvent({required this.postId});
+  FetchCommentsByPostId(this.postId);
+}
 
-  @override
-  List<Object> get props => [postId];
+class SaveCommentsEvent extends CommentsEvent {
+  final int postId;
+  final List<Comment> comments;
+
+  SaveCommentsEvent(this.postId, this.comments);
+}
+
+class RemoveCommentsEvent extends CommentsEvent {
+  final int postId;
+
+  RemoveCommentsEvent(this.postId);
 } 
